@@ -2,6 +2,7 @@ package main
 
 import (
 	. "github.com/smartystreets/goconvey/convey"
+	"go_graphql_frame/graphql"
 	sw "go_graphql_frame/lib"
 	"io/ioutil"
 	"log"
@@ -18,7 +19,7 @@ func TestCircle(t *testing.T) {
 
 	router := sw.GetRouter()
 
-	ts := httptest.NewServer(sw.LogRequest(router))
+	ts := httptest.NewServer(graphql.LogRequest(router))
 	defer ts.Close()
 
 	Convey("App run", t, func() {

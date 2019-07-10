@@ -1,0 +1,26 @@
+{
+	"users" : [
+		{
+			"id" : 1,
+			"login" : "IgorTest1",
+			"pass" : "PassTest2"
+		},
+		{
+			"id" : 2,
+			"login" : "IgorTest2",
+			"pass" : "PassTest2"
+		}
+	],
+	"profiles"	: [
+		{
+			"id" : 1,
+			"name_first" : "Igor1",
+			"name_last" : "Test1"
+		},
+		{
+			"id" : 2,
+			"name_first" : "Igor2",
+			"name_last" : "Test2"
+		}
+	]
+}

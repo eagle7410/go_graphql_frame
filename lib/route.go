@@ -1,21 +1,22 @@
-
 package lib
 
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/graphql-go/handler"
+	"go_graphql_frame/graphql"
 	"net/http"
 )
 
 func GetRouter() *mux.Router {
 	r := mux.NewRouter()
 
-	//TODO: clear Do somethining ...
-	//r.PathPrefix("/static/").Handler(
-	//	staticAccess(
-	//		http.StripPrefix(
-	//			"/static/",
-	//			http.FileServer(http.Dir(path.Join(ENV.WorkDir, "/front/dist"))))))
+	r.Handle("/graphql", handler.New(&handler.Config{
+		Schema:     graphql.Schema.GetSchemaLink(),
+		Pretty:     true,
+		GraphiQL:   false,
+		Playground: true,
+	}))
 
 	// Tech
 	r.HandleFunc("/ping", ping)
@@ -23,15 +24,6 @@ func GetRouter() *mux.Router {
 
 	return r
 }
-
-//TODO: clear
-//func staticAccess(handler http.Handler) http.Handler {
-//	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-//		//TODO: clear Maybe check access
-//		handler.ServeHTTP(w, r)
-//
-//	})
-//}
 
 func ping(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "PONG \n  IP: %v\n  Host: %v\n", ReadUserIP(r), r.Host)
