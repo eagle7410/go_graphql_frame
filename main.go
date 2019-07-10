@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/handlers"
-	"go_frame/lib"
+	"go_graphql_frame/lib"
 	"log"
 	"net/http"
 )

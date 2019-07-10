@@ -2,9 +2,6 @@
 ## Version
 1.0.0 - base.
 
-## Extends
-[Extends description](https://github.com/eagle7410/fsp-eagle/blob/master/ext.md)
-
 ## People
 Developer [Igor Stcherbina](https://drive.google.com/file/d/1tm6j8uGoeEbaVDYKlsQlkkxAD5WMXp3-/view?usp=sharing)
 

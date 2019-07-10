@@ -2,7 +2,7 @@ package main
 
 import (
 	. "github.com/smartystreets/goconvey/convey"
-	sw "go_frame/lib"
+	sw "go_graphql_frame/lib"
 	"io/ioutil"
 	"log"
 	"net/http"
