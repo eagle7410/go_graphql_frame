@@ -52,16 +52,35 @@ func getSchema() (graphql.Schema, error) {
 			},
 			Resolve: ResolveUser,
 		},
-		"users" : &graphql.Field{
-			Type: graphql.NewList(userType),
-			Resolve:ResolveUsers,
+		"users": &graphql.Field{
+			Type:    graphql.NewList(userType),
+			Resolve: ResolveUsers,
 		},
 	}
 
+	mutation := graphql.Fields{
+		"userUpdate": &graphql.Field{
+			Type: userType,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.Int),
+				},
+				"login": &graphql.ArgumentConfig{
+					Type: graphql.String,
+				},
+				"pass": &graphql.ArgumentConfig{
+					Type: graphql.String,
+				},
+			},
+			Resolve: ResolveUserUpdate,
+		},
+	}
 	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
+	rootMutation := graphql.ObjectConfig{Name: "RootMutation", Fields: mutation}
 
 	schemaConfig := graphql.SchemaConfig{
-		Query: graphql.NewObject(rootQuery),
+		Query:    graphql.NewObject(rootQuery),
+		Mutation: graphql.NewObject(rootMutation),
 	}
 
 	return graphql.NewSchema(schemaConfig)

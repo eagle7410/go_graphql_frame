@@ -1,26 +1,26 @@
 {
-	"users" : [
+	"users": [
 		{
-			"id" : 1,
-			"login" : "IgorTest1",
-			"pass" : "PassTest2"
+			"id": 1,
+			"login": "TU1",
+			"pass": "TUP1"
 		},
 		{
-			"id" : 2,
-			"login" : "IgorTest2",
-			"pass" : "PassTest2"
+			"id": 2,
+			"login": "IgorTest2",
+			"pass": "PassTest2"
 		}
 	],
-	"profiles"	: [
+	"profiles": [
 		{
-			"id" : 1,
-			"name_first" : "Igor1",
-			"name_last" : "Test1"
+			"id": 1,
+			"name_first": "Igor1",
+			"name_last": "Test1"
 		},
 		{
-			"id" : 2,
-			"name_first" : "Igor2",
-			"name_last" : "Test2"
+			"id": 2,
+			"name_first": "Igor2",
+			"name_last": "Test2"
 		}
 	]
 }

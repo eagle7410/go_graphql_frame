@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
 )
 
@@ -20,13 +21,16 @@ type (
 		NameLast  string `json:"name_last"`
 	}
 	db struct {
-		Users    []User    `json:"users"`
-		Profiles []Profile `json:"profiles"`
+		Users     []User    `json:"users"`
+		Profiles  []Profile `json:"profiles"`
+		StoreFile string    `json:"-"`
 	}
 )
 
 func (i *db) Init(dbStorePath string) error {
-	contentByte, err := ioutil.ReadFile(path.Join(dbStorePath, "data.json"))
+	i.StoreFile = path.Join(dbStorePath, "data.json")
+
+	contentByte, err := ioutil.ReadFile(i.StoreFile)
 
 	if err != nil {
 		return errors.New(fmt.Sprintf("Error read data file: %v", err))
@@ -61,6 +65,28 @@ func (i *db) GetProfileById(id *int) interface{} {
 
 	return nil
 }
+func (i *db) Save() error {
+	bytes, err := json.MarshalIndent(i, "", "\t")
+
+	if err != nil {
+		return err
+	}
+
+	return ioutil.WriteFile(i.StoreFile, bytes, os.FileMode(os.O_WRONLY))
+
+}
+func (i *db) UpdateUser(user *User) error {
+	for inx, dbUser := range i.Users {
+		if dbUser.Id == user.Id {
+			i.Users[inx].Login = user.Login
+			i.Users[inx].Pass = user.Pass
+
+			return i.Save()
+		}
+	}
+
+	return nil
+}
 
 func (i *db) GetUserById(id *int) interface{} {
 
@@ -73,7 +99,7 @@ func (i *db) GetUserById(id *int) interface{} {
 	return nil
 }
 
-func (i *db) GetUsers () []User  {
+func (i *db) GetUsers() []User {
 	return i.Users
 }
 

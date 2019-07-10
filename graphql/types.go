@@ -32,7 +32,7 @@ var userType = graphql.NewObject(
 				Type: graphql.String,
 			},
 			"profile": &graphql.Field{
-				Type: profileType,
+				Type:    profileType,
 				Resolve: ResolveProfile,
 			},
 		},

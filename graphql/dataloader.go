@@ -11,16 +11,16 @@ type appDataLoader struct {
 	ProfileLoader *dataloader.Loader
 }
 
-func (i *appDataLoader) Init ()  {
+func (i *appDataLoader) Init() {
 	i.ProfileLoader = dataloader.NewBatchedLoader(profileBatch)
 }
 
-func profileBatch (_ context.Context, keys dataloader.Keys) []*dataloader.Result {
+func profileBatch(_ context.Context, keys dataloader.Keys) []*dataloader.Result {
 	var results []*dataloader.Result
 
 	for _, key := range keys {
 		data := dataloader.Result{}
-		id64 , err := strconv.ParseInt(key.String(), 10, 64)
+		id64, err := strconv.ParseInt(key.String(), 10, 64)
 
 		if err != nil {
 			data.Error = err
