@@ -8,20 +8,30 @@ import (
 	"go_graphql_frame/db"
 )
 
-type KeyId struct {
-	Val int
-}
-
-func (i *KeyId) String() string {
-	return fmt.Sprintf("%v", i.Val)
-}
-
-func (i *KeyId) Raw() interface{} {
-	return *i
-}
-
 func ResolveUsers(_ graphql.ResolveParams) (interface{}, error) {
 	return db.Data.GetUsers(), nil
+}
+
+func ResolveUserCreate(p graphql.ResolveParams) (interface{}, error) {
+	login, _ := p.Args["login"].(string)
+	pass, _ := p.Args["pass"].(string)
+
+	user := db.User{
+		Login: login,
+		Pass:  pass,
+	}
+
+	err := db.Data.CreateUser(&user)
+
+	return user, err
+}
+
+func ResolveUserRemove(p graphql.ResolveParams) (interface{}, error) {
+	id, _ := p.Args["id"].(int)
+
+	Logf("Remove user with id %v", id)
+
+	return db.Data.RemoveUser(&id)
 }
 
 func ResolveUserUpdate(p graphql.ResolveParams) (interface{}, error) {

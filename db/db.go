@@ -75,6 +75,34 @@ func (i *db) Save() error {
 	return ioutil.WriteFile(i.StoreFile, bytes, os.FileMode(os.O_WRONLY))
 
 }
+func (i *db) CreateUser(user *User) error {
+	max := 0
+
+	for _, dbUser := range i.Users {
+		if max < dbUser.Id {
+			max = dbUser.Id
+		}
+	}
+
+	user.Id = max + 1
+
+	i.Users = append(i.Users, *user)
+
+	return i.Save()
+}
+
+func (i *db) RemoveUser(id *int) (bool, error) {
+	for inx, dbUser := range i.Users {
+		if dbUser.Id == *id {
+			i.Users = append(i.Users[:inx], i.Users[inx+1:]...)
+
+			return true, i.Save()
+		}
+	}
+
+	return false, nil
+}
+
 func (i *db) UpdateUser(user *User) error {
 	for inx, dbUser := range i.Users {
 		if dbUser.Id == user.Id {

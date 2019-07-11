@@ -59,6 +59,18 @@ func getSchema() (graphql.Schema, error) {
 	}
 
 	mutation := graphql.Fields{
+		"userCreate": &graphql.Field{
+			Type: userType,
+			Args: graphql.FieldConfigArgument{
+				"login": &graphql.ArgumentConfig{
+					Type: graphql.String,
+				},
+				"pass": &graphql.ArgumentConfig{
+					Type: graphql.String,
+				},
+			},
+			Resolve: ResolveUserCreate,
+		},
 		"userUpdate": &graphql.Field{
 			Type: userType,
 			Args: graphql.FieldConfigArgument{

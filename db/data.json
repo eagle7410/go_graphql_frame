@@ -1,14 +1,14 @@
 {
 	"users": [
 		{
-			"id": 1,
-			"login": "TU1",
-			"pass": "TUP1"
-		},
-		{
 			"id": 2,
 			"login": "IgorTest2",
 			"pass": "PassTest2"
+		},
+		{
+			"id": 3,
+			"login": "MutUser",
+			"pass": "MutPass"
 		}
 	],
 	"profiles": [

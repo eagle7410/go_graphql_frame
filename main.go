@@ -5,7 +5,6 @@ import (
 	"go_graphql_frame/db"
 	"go_graphql_frame/graphql"
 	"go_graphql_frame/lib"
-
 	"log"
 	"net/http"
 )
@@ -14,18 +13,18 @@ const port = ":8080"
 
 func init() {
 
-	graphql.OpenLogFile()
+	lib.OpenLogFile()
 
 	if err := lib.ENV.Init(); err != nil {
-		graphql.LogFatalf("Error on initializing environment : %s", err)
+		lib.LogFatalf("Error on initializing environment : %s", err)
 	}
 
 	if err := graphql.Schema.Init(); err != nil {
-		graphql.LogFatalf("Error on initializing graphQl schema : %s", err)
+		lib.LogFatalf("Error on initializing graphQl schema : %s", err)
 	}
 
 	if err := db.Data.Init(lib.ENV.WorkDir + "/db"); err != nil {
-		graphql.LogFatalf("Error on initializing database : %s", err)
+		lib.LogFatalf("Error on initializing database : %s", err)
 	}
 }
 
