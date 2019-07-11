@@ -43,6 +43,16 @@ func (i *db) Init(dbStorePath string) error {
 	return nil
 }
 
+func (i *db) FindByLoginPass(login, pass *string) (User, bool) {
+	for _, user := range i.Users {
+		if user.Login == *login && user.Pass == *pass {
+			return user, true
+		}
+	}
+
+	return User{}, false
+}
+
 func (i *db) GetProfileByBatch(id *int) interface{} {
 	for _, profile := range i.Profiles {
 		if profile.Id == *id {

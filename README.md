@@ -1,3 +1,8 @@
+## DESCI NSTALL
+In Playground need add to setting:
+``
+"request.credentials": "include",
+``
 
 ## Version
 1.0.0 - base.

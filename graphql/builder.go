@@ -1,12 +1,30 @@
 package graphql
 
 import (
+	"context"
+	"github.com/gorilla/securecookie"
 	"github.com/graphql-go/graphql"
+	"github.com/graphql-go/handler"
+	"go_graphql_frame/db"
+	"net/http"
 )
+
+const contextKey = "store"
+const cookUserName = "user"
 
 type (
 	graphQl struct {
 		schema graphql.Schema
+	}
+	graphQlContext struct {
+		Writer       http.ResponseWriter
+		Cookies      []*http.Cookie
+		Securecookie *securecookie.SecureCookie
+		User         db.User
+	}
+	Env interface {
+		GetCookHashKeyLink() *string
+		GetCookHashValueLink() *string
 	}
 )
 
@@ -39,6 +57,10 @@ func getSchema() (graphql.Schema, error) {
 	// Schema
 
 	fields := graphql.Fields{
+		"me": &graphql.Field{
+			Type:    userType,
+			Resolve: ResolveMe,
+		},
 		"hello": &graphql.Field{
 			Type:    graphql.String,
 			Resolve: ResolveHello,
@@ -59,14 +81,35 @@ func getSchema() (graphql.Schema, error) {
 	}
 
 	mutation := graphql.Fields{
+		"auth": &graphql.Field{
+			Type: userType,
+			Args: graphql.FieldConfigArgument{
+				"login": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
+				"pass": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
+			},
+			Resolve: ResolveAuth,
+		},
+		"userDelete": &graphql.Field{
+			Type: graphql.Boolean,
+			Args: graphql.FieldConfigArgument{
+				"id": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.Int),
+				},
+			},
+			Resolve: ResolveUserRemove,
+		},
 		"userCreate": &graphql.Field{
 			Type: userType,
 			Args: graphql.FieldConfigArgument{
 				"login": &graphql.ArgumentConfig{
-					Type: graphql.String,
+					Type: graphql.NewNonNull(graphql.String),
 				},
 				"pass": &graphql.ArgumentConfig{
-					Type: graphql.String,
+					Type: graphql.NewNonNull(graphql.String),
 				},
 			},
 			Resolve: ResolveUserCreate,
@@ -98,6 +141,42 @@ func getSchema() (graphql.Schema, error) {
 	return graphql.NewSchema(schemaConfig)
 }
 
-func ResolveHello(_ graphql.ResolveParams) (interface{}, error) {
-	return "world", nil
+func GetHandlerGraphQl(env Env) http.HandlerFunc {
+
+	graphQLHandler := GetGraphQLHandler()
+
+	hashKey := []byte(*env.GetCookHashKeyLink())
+	blockKey := []byte(*env.GetCookHashValueLink())
+
+	sc := securecookie.New(hashKey, blockKey)
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		currentUser := db.User{}
+
+		if cookie, err := r.Cookie(cookUserName); err == nil {
+			if err := sc.Decode(cookUserName, cookie.Value, &currentUser); err != nil {
+				Logf("Error decode cook %v", err)
+			}
+		}
+
+		contextValue := graphQlContext{
+			Cookies:      r.Cookies(),
+			Writer:       w,
+			Securecookie: sc,
+			User:         currentUser,
+		}
+
+		ctx := context.WithValue(r.Context(), contextKey, contextValue)
+
+		graphQLHandler.ContextHandler(ctx, w, r)
+	})
+}
+
+func GetGraphQLHandler() *handler.Handler {
+	return handler.New(&handler.Config{
+		Schema:     Schema.GetSchemaLink(),
+		Pretty:     true,
+		GraphiQL:   false,
+		Playground: true,
+	})
 }

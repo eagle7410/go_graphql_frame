@@ -6,9 +6,14 @@
 			"pass": "PassTest2"
 		},
 		{
-			"id": 3,
-			"login": "MutUser",
-			"pass": "MutPass"
+			"id": 4,
+			"login": "MutUser1",
+			"pass": "MutPass1"
+		},
+		{
+			"id": 5,
+			"login": "MutUser2",
+			"pass": "MutPass2"
 		}
 	],
 	"profiles": [

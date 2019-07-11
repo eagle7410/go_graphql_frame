@@ -3,7 +3,6 @@ package lib
 import (
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/graphql-go/handler"
 	"go_graphql_frame/graphql"
 	"net/http"
 )
@@ -11,12 +10,9 @@ import (
 func GetRouter() *mux.Router {
 	r := mux.NewRouter()
 
-	r.Handle("/graphql", handler.New(&handler.Config{
-		Schema:     graphql.Schema.GetSchemaLink(),
-		Pretty:     true,
-		GraphiQL:   false,
-		Playground: true,
-	}))
+	//Graphql
+	handlerGraphQl := graphql.GetHandlerGraphQl(&ENV)
+	r.Handle("/graphql", handlerGraphQl)
 
 	// Tech
 	r.HandleFunc("/ping", ping)

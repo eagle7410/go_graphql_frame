@@ -2,14 +2,53 @@ package graphql
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/graph-gophers/dataloader"
 	"github.com/graphql-go/graphql"
 	"go_graphql_frame/db"
+	"net/http"
 )
 
 func ResolveUsers(_ graphql.ResolveParams) (interface{}, error) {
 	return db.Data.GetUsers(), nil
+}
+
+func ResolveMe(p graphql.ResolveParams) (interface{}, error) {
+	ctx := p.Context.Value(contextKey).(graphQlContext)
+
+	return ctx.User, nil
+}
+
+//TODO: clear
+func ResolveAuth(p graphql.ResolveParams) (interface{}, error) {
+
+	login, _ := p.Args["login"].(string)
+	pass, _ := p.Args["pass"].(string)
+
+	user, isFind := db.Data.FindByLoginPass(&login, &pass)
+
+	var err error
+
+	if !isFind {
+		err = errors.New("User not found")
+	} else {
+		ctx := p.Context.Value(contextKey).(graphQlContext)
+		encoded, err := ctx.Securecookie.Encode(cookUserName, user)
+
+		if err == nil {
+			cookie := &http.Cookie{
+				Name:     cookUserName,
+				Value:    encoded,
+				Path:     "/",
+				HttpOnly: true,
+			}
+
+			http.SetCookie(ctx.Writer, cookie)
+		}
+	}
+
+	return user, err
 }
 
 func ResolveUserCreate(p graphql.ResolveParams) (interface{}, error) {
@@ -72,4 +111,8 @@ func ResolveProfile(p graphql.ResolveParams) (interface{}, error) {
 	thunk := loader.Load(context.Background(), key)
 
 	return thunk()
+}
+
+func ResolveHello(_ graphql.ResolveParams) (interface{}, error) {
+	return "world", nil
 }

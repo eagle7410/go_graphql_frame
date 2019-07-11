@@ -13,8 +13,18 @@ import (
 type env struct {
 	WorkDir,
 	TimeZone,
+	CookHashKey,
+	CookHashValue,
 	Place string
 	IsDev bool
+}
+
+func (i *env) GetCookHashKeyLink() *string {
+	return &i.CookHashKey
+}
+
+func (i *env) GetCookHashValueLink() *string {
+	return &i.CookHashValue
 }
 
 func (i *env) GetIsDev() bool {
@@ -45,8 +55,10 @@ func (i *env) Init() error {
 	}
 
 	props := map[string]bool{
-		"TimeZone": false,
-		"Place":    true,
+		"CookHashValue": true,
+		"CookHashKey":   true,
+		"TimeZone":      false,
+		"Place":         true,
 	}
 
 	for prop, isRequired := range props {
@@ -62,6 +74,14 @@ func (i *env) Init() error {
 
 	if strings.ToLower(os.Getenv("isDev")) == "true" {
 		i.IsDev = true
+	}
+
+	if len(i.CookHashValue) < 16 {
+		return errors.New("CookHashValue must be 16 char")
+	}
+
+	if len(i.CookHashKey) < 16 {
+		return errors.New("CookHashKey must be 16 char")
 	}
 
 	if i.TimeZone == "" {

@@ -37,6 +37,7 @@ func main() {
 	middleware := lib.SetCorsMiddleware(
 		lib.LogRequest(
 			handlers.CORS(
+				handlers.AllowCredentials(),
 				handlers.AllowedHeaders([]string{"*"}),
 				handlers.AllowedMethods(lib.AllowedMethods()),
 				handlers.AllowedOrigins([]string{"*"}))(router)))
