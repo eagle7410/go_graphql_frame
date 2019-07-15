@@ -2,6 +2,7 @@ package graphql
 
 import (
 	"context"
+	util "github.com/eagle7410/go_util/libs"
 	"github.com/gorilla/securecookie"
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
@@ -36,7 +37,7 @@ func (i *graphQl) Init() error {
 
 	Dataloders.Init()
 
-	Logf("-- Init dataloader is OK...")
+	util.Logf("-- Init dataloader is OK...")
 
 	schema, err := getSchema()
 
@@ -46,7 +47,7 @@ func (i *graphQl) Init() error {
 
 	i.schema = schema
 
-	Logf("-- Init schema is OK...")
+	util.Logf("-- Init schema is OK...")
 
 	return nil
 }
@@ -155,7 +156,7 @@ func GetHandlerGraphQl(env Env) http.HandlerFunc {
 
 		if cookie, err := r.Cookie(cookUserName); err == nil {
 			if err := sc.Decode(cookUserName, cookie.Value, &currentUser); err != nil {
-				Logf("Error decode cook %v", err)
+				util.Logf("Error decode cook %v", err)
 			}
 		}
 

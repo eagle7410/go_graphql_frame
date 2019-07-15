@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	util "github.com/eagle7410/go_util/libs"
 	"github.com/graph-gophers/dataloader"
 	"github.com/graphql-go/graphql"
 	"go_graphql_frame/db"
@@ -45,7 +46,7 @@ func ResolveAuth(p graphql.ResolveParams) (interface{}, error) {
 
 			http.SetCookie(ctx.Writer, cookie)
 		} else {
-			LogEF("Error in ResolveAuth, encode cookie: %v", err)
+			util.LogEF("Error in ResolveAuth, encode cookie: %v", err)
 		}
 	}
 

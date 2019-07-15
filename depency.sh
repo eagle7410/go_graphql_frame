@@ -8,3 +8,4 @@ go get -u github.com/graphql-go/graphql
 go get -u github.com/graphql-go/handler
 go get -u github.com/graph-gophers/dataloader
 go get -u github.com/gorilla/securecookie
+go get -u github.com/eagle7410/go_util/libs

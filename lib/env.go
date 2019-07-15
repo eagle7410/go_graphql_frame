@@ -17,6 +17,7 @@ type env struct {
 	CookHashValue,
 	Place string
 	IsDev bool
+	AllowedMethods []string
 }
 
 func (i *env) GetCookHashKeyLink() *string {
@@ -27,11 +28,9 @@ func (i *env) GetCookHashValueLink() *string {
 	return &i.CookHashValue
 }
 
-func (i *env) GetIsDev() bool {
-	return i.IsDev
-}
-
 func (i *env) Init() error {
+
+	i.AllowedMethods = []string{"GET", "POST", "OPTIONS"}
 
 	pwd, err := os.Getwd()
 

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	util "github.com/eagle7410/go_util/libs"
 	"io/ioutil"
 	"os"
 	"path"
@@ -65,7 +66,7 @@ func (i *db) GetProfileByBatch(id *int) interface{} {
 
 func (i *db) GetProfileById(id *int) interface{} {
 
-	Logf("GetProfileById profile with id %v", *id)
+	util.Logf("GetProfileById profile with id %v", *id)
 
 	for _, profile := range i.Profiles {
 		if profile.Id == *id {

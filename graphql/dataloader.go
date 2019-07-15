@@ -3,6 +3,7 @@ package graphql
 import (
 	"context"
 	"go_graphql_frame/db"
+	util "github.com/eagle7410/go_util/libs"
 	"strconv"
 )
 import "github.com/graph-gophers/dataloader"
@@ -27,7 +28,7 @@ func profileBatch(_ context.Context, keys dataloader.Keys) []*dataloader.Result 
 		} else {
 			id := int(id64)
 
-			Logf("Use data loader profileBatch %v", id)
+			util.Logf("Use data loader profileBatch %v", id)
 
 			data.Data = db.Data.GetProfileById(&id)
 		}
